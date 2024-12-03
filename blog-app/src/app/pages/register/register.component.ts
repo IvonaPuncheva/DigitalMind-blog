@@ -1,11 +1,40 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
-  imports: [],
+  standalone: true, 
+  imports: [CommonModule, ReactiveFormsModule], 
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
+  registerForm: FormGroup;
+  message: string = '';
 
+  constructor(private fb: FormBuilder, private http: HttpClient) {
+    this.registerForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  onRegister() {
+    if (this.registerForm.valid) {
+      this.http.post('http://localhost:5000/register', this.registerForm.value)
+        .subscribe(
+          (res: any) => {
+            this.message = res.message || 'Registration successful!';
+          },
+          (err) => {
+            this.message = err.error.message || 'An error occurred during registration.';
+          }
+        );
+    } else {
+      this.message = 'Please fill in all fields correctly.';
+    }
+  }
 }
