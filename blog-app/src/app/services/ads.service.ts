@@ -11,11 +11,15 @@ export class AdsService {
 
   constructor(private http: HttpClient) { }
 
-
   getAds(): Observable<any[]> {
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
-    return this.http.get<any[]>(this.apiUrl, { headers });
+  
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('authToken');
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.http.get<any[]>(this.apiUrl, { headers });
+    } else {
+     
+      return this.http.get<any[]>(this.apiUrl);
+    }
   }
 }

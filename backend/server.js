@@ -160,7 +160,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.get('/ads', authenticate, async (req, res) => {
+app.get('/ads', async (req, res) => {
     try {
         const ads = await Ad.find().populate('userId', 'username'); 
         res.status(200).json(ads);
