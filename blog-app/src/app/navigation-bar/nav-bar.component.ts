@@ -13,6 +13,7 @@ import { AuthenticationService } from "../services/authentication.service";
       <a class="nav-btn" href="/home">Home</a>
       <a class="nav-btn" href="/about">About</a>
       <a class="nav-btn" href="/catalog">Catalog</a>
+      <a class="nav-btn" href="/create">Ccreate</a>
 
    
       <a *ngIf="!authService.isLoggedIn()" class="nav-btn" href="/login">Login</a>

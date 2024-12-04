@@ -81,7 +81,56 @@ const User = mongoose.model('User', new mongoose.Schema({
     password: { type: String, required: true },
     registrationDate: { type: Date, default: Date.now }
 }));
+const Ad = mongoose.model('Ad', new mongoose.Schema({
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+    createdAt: { type: Date, default: Date.now },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}));
 
+
+function authenticate(req, res, next) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        req.user = decoded; 
+        next();
+    } catch (err) {
+        res.status(403).json({ message: 'Invalid token' });
+    }
+}
+
+
+app.post('/create', authenticate, async (req, res) => {
+    try {
+        const { title, description, price } = req.body;
+        const userId = req.user.id; 
+
+        console.log('Received data:', { title, description, price, userId });
+
+        if (!title || !description || price == null || !userId) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        const newAd = new Ad({
+            title,
+            description,
+            price,
+            userId
+        });
+
+        await newAd.save();
+        res.status(201).json({ message: 'Ad created successfully', ad: newAd });
+    } catch (err) {
+        console.error('Error during ad creation:', err);
+        res.status(500).json({ message: 'Error during ad creation', error: err });
+    }
+});
 
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
@@ -110,6 +159,17 @@ app.post('/register', async (req, res) => {
         res.status(500).json({ message: 'Error during registration', error: err });
     }
 });
+
+app.get('/ads', authenticate, async (req, res) => {
+    try {
+        const ads = await Ad.find().populate('userId', 'username'); 
+        res.status(200).json(ads);
+    } catch (err) {
+        console.error('Error fetching ads:', err);
+        res.status(500).json({ message: 'Error fetching ads', error: err });
+    }
+});
+
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

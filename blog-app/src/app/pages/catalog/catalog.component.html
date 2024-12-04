@@ -1,1 +1,11 @@
-<p>catalog works!</p>
+
+<div class="ads-list">
+    <div *ngFor="let ad of ads" class="ad-item">
+      <h3>{{ ad.title }}</h3>
+      <p>{{ ad.description }}</p>
+      <!-- <p><strong>Цена: </strong>{{ ad.price }} лв.</p> -->
+      <p><strong>Публикувано от: </strong>{{ ad.userId.username }}</p>
+      <hr />
+    </div>
+  </div>
+  
