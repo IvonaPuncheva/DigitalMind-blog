@@ -19,7 +19,7 @@ export class CreateComponent {
     this.adForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(20)]],
-      price: ['', [Validators.required, Validators.min(0)]]
+
     });
   }
 
@@ -30,17 +30,15 @@ export class CreateComponent {
         this.message = 'You need to be logged in to create an ad!';
         return;
       }
-
-   
+  
       this.http.post('http://localhost:5000/create', this.adForm.value, {
         headers: {
           Authorization: `Bearer ${token}`  
         }
-      })
-      .subscribe(
+      }).subscribe(
         (res: any) => {
           this.message = res.message || 'Ad successfully added!';
-          this.router.navigate(['/home']);
+          this.router.navigate(['/catalog']); 
         },
         (err) => {
           this.message = err.error.message || 'An error occurred while adding the ad.';
@@ -50,4 +48,7 @@ export class CreateComponent {
       this.message = 'Please fill in all fields correctly.';
     }
   }
+  
+ 
+      
 }

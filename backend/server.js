@@ -47,6 +47,7 @@ const SECRET_KEY = 'your_secret_key';
 
 
 
+
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -84,20 +85,57 @@ const User = mongoose.model('User', new mongoose.Schema({
 const Ad = mongoose.model('Ad', new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: Number, required: true },
+
     createdAt: { type: Date, default: Date.now },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    likes: { type: Number, default: 0 }, 
+    likedUsers: { type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] } 
 }));
+
+const likedAds = new Map(); 
+
+
+app.post('/ads/:id/like', authenticate, async (req, res) => {
+    try {
+        const adId = req.params.id;  
+        const userId = req.user.id;  
+
+      
+        const ad = await Ad.findById(adId);
+        if (!ad) {
+            return res.status(404).json({ message: 'Ad not found' });
+        }
+
+    
+        if (ad.likedUsers.map(id => id.toString()).includes(userId.toString())) {
+            return res.status(400).json({ message: 'You have already liked this ad.' });
+        }
+        
+     
+        ad.likes += 1;
+        ad.likedUsers.push(userId);
+
+       
+        await ad.save();
+
+        res.status(200).json({ likes: ad.likes, message: 'Ad liked successfully' });
+    } catch (err) {
+        console.error('Error liking ad:', err);
+        res.status(500).json({ message: 'Error liking ad', error: err });
+    }
+});
 
 
 function authenticate(req, res, next) {
     const token = req.headers.authorization?.split(' ')[1];
+    console.log('Received Token:', token); 
     if (!token) {
         return res.status(401).json({ message: 'Authentication required' });
     }
 
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
+        console.log('Decoded Token:', decoded); 
         req.user = decoded; 
         next();
     } catch (err) {
@@ -108,19 +146,19 @@ function authenticate(req, res, next) {
 
 app.post('/create', authenticate, async (req, res) => {
     try {
-        const { title, description, price } = req.body;
+        const { title, description } = req.body;
         const userId = req.user.id; 
 
-        console.log('Received data:', { title, description, price, userId });
+        console.log('Received data:', { title, description, userId });
 
-        if (!title || !description || price == null || !userId) {
+        if (!title || !description  || !userId) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
         const newAd = new Ad({
             title,
             description,
-            price,
+        
             userId
         });
 
@@ -131,6 +169,8 @@ app.post('/create', authenticate, async (req, res) => {
         res.status(500).json({ message: 'Error during ad creation', error: err });
     }
 });
+
+
 
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
@@ -167,6 +207,15 @@ app.get('/ads', async (req, res) => {
     } catch (err) {
         console.error('Error fetching ads:', err);
         res.status(500).json({ message: 'Error fetching ads', error: err });
+    }
+});
+
+
+app.post('/verify-token', authenticate, (req, res) => {
+    try {
+        res.status(200).json({ message: 'Token is valid' });
+    } catch (err) {
+        res.status(401).json({ message: 'Invalid or expired token' });
     }
 });
 

@@ -1,5 +1,6 @@
+
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';  
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
 import { CommonModule } from '@angular/common'; 
@@ -32,9 +33,11 @@ import { CommonModule } from '@angular/common';
     .login-container { max-width: 400px; margin: auto; }
     .error { color: red; margin-top: 10px; }
   `],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],  
 })
 export class LoginComponent {
+  email: string = '';
+  password: string = '';
   loginForm: FormGroup;
   errorMessage: string | null = null;
 
@@ -43,7 +46,6 @@ export class LoginComponent {
     private authService: AuthenticationService,
     private router: Router
   ) {
-    
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/catalog']);
     }
@@ -58,7 +60,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
 
-      this.authService.login(email, password).subscribe({
+      this.authService.loginUser(email, password).subscribe({
         next: () => {
           this.errorMessage = null;
           alert('Login successful!');
@@ -71,4 +73,3 @@ export class LoginComponent {
     }
   }
 }
-

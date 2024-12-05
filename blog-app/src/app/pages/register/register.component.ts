@@ -23,34 +23,18 @@ export class RegisterComponent {
     });
   }
 
-  // onRegister() {
-  //   if (this.registerForm.valid) {
-  //     this.http.post('http://localhost:5000/register', this.registerForm.value)
-  //       .subscribe(
-  //         (res: any) => {
-  //           this.message = res.message || 'Registration successful!';
-  //         },
-  //         (err) => {
-  //           this.message = err.error.message || 'An error occurred during registration.';
-  //           this.router.navigate(['/login']);
-  //         }
-  //       );
-  //   } else {
-  //     this.message = 'Please fill in all fields correctly.';
-  //   }
-  // }
+
   onRegister() {
     if (this.registerForm.valid) {
       this.http.post('http://localhost:5000/register', this.registerForm.value)
         .subscribe(
           (res: any) => {
-            // Показване на съобщение за успешна регистрация
+         
             this.message = res.message || 'Registration successful!';
-            // Пренасочване към login
+        
             this.router.navigate(['/login']);
           },
           (err) => {
-            // Показване на грешка, ако има проблем при регистрацията
             this.message = err.error.message || 'An error occurred during registration.';
           }
         );

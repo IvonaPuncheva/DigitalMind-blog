@@ -1,4 +1,5 @@
-<div class="add-ad-container">
+
+  <div class="add-ad-container">
     <h2>Add New Advertisement</h2>
     <form [formGroup]="adForm" (ngSubmit)="onSubmit()">
       <div>
@@ -9,12 +10,10 @@
         <label for="description">Description</label>
         <textarea id="description" formControlName="description"></textarea>
       </div>
-      <div>
-        <label for="price">Price</label>
-        <input id="price" formControlName="price" type="number">
-      </div>
       <button type="submit">Submit</button>
     </form>
     <p>{{ message }}</p>
   </div>
+  
+
   

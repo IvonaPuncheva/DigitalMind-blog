@@ -21,5 +21,21 @@ export class AdsService {
      
       return this.http.get<any[]>(this.apiUrl);
     }
+    
+    
   }
+  likeAd(adId: string): Observable<any> {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          return new Observable(observer => {
+            observer.error('Не сте влезли в профила си.');
+          });
+        }
+    
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        return this.http.post<any>(`http://localhost:5000/ads/${adId}/like`, {}, { headers });
+      }
+  
 }
+
+
