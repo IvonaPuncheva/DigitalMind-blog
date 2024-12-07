@@ -1,8 +1,10 @@
 <div class="ad-details" *ngIf="ad">
     <h1>{{ ad.title }}</h1>
     <p>{{ ad.description }}</p>
+    <p><strong>Posted by: </strong>{{ ad.userId.username }}</p>
+    <p><strong>Published on: </strong>{{ ad.createdAt | date:'medium' }}</p>
     <p>Likes: {{ ad.likes }}</p>
-    <p>Posted by: {{ ad.userId.username }}</p>
+    <button (click)="likeAd()">Like</button>
   </div>
   <div *ngIf="!ad">
     <p>Loading ad details...</p>

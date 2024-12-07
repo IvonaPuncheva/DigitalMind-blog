@@ -1,56 +1,23 @@
-<!-- 
-<div class="ads-list">
-    <div *ngFor="let ad of ads" class="ad-item">
-      <h3>{{ ad.title }}</h3>
-      <p>{{ ad.description }}</p>
 
-      <p><strong>Публикувано от: </strong>{{ ad.userId.username }}</p>
-      <hr />
-    </div>
-  </div> -->
-  <!-- <div class="ads-list">
-    <div *ngFor="let ad of ads" class="ad-item">
-        <h3>{{ ad.title }}</h3>
-        <p>{{ ad.description }}</p>
-        <p><strong>Публикувано от: </strong>{{ ad.userId.username }}</p>
-        <p><strong>Публикувано на: </strong>{{ ad.createdAt | date:'medium' }}</p>
-        <p>Харесвания: {{ ad.likes || 0 }}</p>
-        <button *ngIf="!ad.liked" (click)="likeAd(ad._id)">Like</button>
-        <hr />
-    </div>
-</div> -->
 <div class="ads-list">
+
   <div *ngFor="let ad of ads" class="ad-item">
     <h3>{{ ad.title }}</h3>
     <p>{{ ad.description }}</p>
-    <p><strong>Публикувано от: </strong>{{ ad.userId.username }}</p>
-    <p><strong>Публикувано на: </strong>{{ ad.createdAt | date:'medium' }}</p>
-
-    <div>
-      <!-- Покажи бутона "Like" само ако потребителят не е харесал -->
-      <button *ngIf="!ad.likedByCurrentUser" (click)="likeAd(ad._id)">Like</button>
-      <span *ngIf="ad.likedByCurrentUser">Вече сте харесали тази обява</span>
-    </div>
     <p>Likes: {{ ad.likes }}</p>
-    <hr />
+    <button (click)="navigateToDetails(ad._id)">Details</button>
+   
   </div>
 </div>
 
 
-  <!-- <div class="ads-list">
-    <div *ngFor="let ad of ads" class="ad-item">
-      <h3>{{ ad.title }}</h3>
-      <p>{{ ad.description }}</p>
-      <p><strong>Цена: </strong>{{ ad.price }} лв.</p>
-      <p><strong>Публикувано от: </strong>{{ ad.userId.username }}</p>
+
   
-      Бутоните са видими само за създателя на обявата
-      <div *ngIf="ad.userId._id === currentUserId" class="ad-actions">
+
+      <!-- <div *ngIf="ad.userId._id === currentUserId" class="ad-actions">
         <button (click)="onEdit(ad)">Edit</button>
         <button (click)="onDelete(ad._id)">Delete</button>
-      </div>
+      </div> -->
   
-      <hr />
-    </div>
-  </div> -->
+
   

@@ -64,6 +64,9 @@ likeAd(adId: string) {
   );
 }
 
+navigateToDetails(adId: string) {
+  this.router.navigate(['/details', adId]);
+}
 
   ngOnInit() {
     this.loadAds(); 

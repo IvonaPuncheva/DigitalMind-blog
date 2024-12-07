@@ -9,6 +9,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { AuthGuard } from './auth.guard';
 import { CreateComponent } from './pages/create/create.component';
 import { NgModule } from '@angular/core';
+import { DetailsComponent } from './details/details.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {path: 'create', component: CreateComponent, canActivate: [AuthGuard]},
+  { path: 'details/:id', component: DetailsComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 @NgModule({

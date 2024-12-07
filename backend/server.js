@@ -209,6 +209,19 @@ app.get('/ads', async (req, res) => {
         res.status(500).json({ message: 'Error fetching ads', error: err });
     }
 });
+app.get('/ads/:id', async (req, res) => {
+    try {
+      const ad = await Ad.findById(req.params.id).populate('userId', 'username');
+      if (!ad) {
+        return res.status(404).json({ message: 'Ad not found' });
+      }
+      res.status(200).json(ad);
+    } catch (err) {
+      console.error('Error fetching ad details:', err);
+      res.status(500).json({ message: 'Error fetching ad details', error: err });
+    }
+  });
+  
 
 
 app.post('/verify-token', authenticate, (req, res) => {
