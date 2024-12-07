@@ -1,0 +1,10 @@
+<div class="ad-details" *ngIf="ad">
+    <h1>{{ ad.title }}</h1>
+    <p>{{ ad.description }}</p>
+    <p>Likes: {{ ad.likes }}</p>
+    <p>Posted by: {{ ad.userId.username }}</p>
+  </div>
+  <div *ngIf="!ad">
+    <p>Loading ad details...</p>
+  </div>
+  
