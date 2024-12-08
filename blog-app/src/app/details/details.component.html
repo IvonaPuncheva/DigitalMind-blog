@@ -5,6 +5,9 @@
     <p><strong>Published on: </strong>{{ ad.createdAt | date:'medium' }}</p>
     <p>Likes: {{ ad.likes }}</p>
     <button (click)="likeAd()">Like</button>
+    <div *ngIf="isOwner" class="owner-actions">
+      <button (click)="editAd()">Edit</button>
+    </div>
   </div>
   <div *ngIf="!ad">
     <p>Loading ad details...</p>

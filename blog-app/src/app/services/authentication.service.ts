@@ -34,6 +34,17 @@ export class AuthenticationService {
     }
     return false;
   }
+  getCurrentUserId(): string | null {
+    const token = localStorage.getItem('authToken');
+    if (!token) return null;
+  
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])); 
+      return payload.id;
+    } catch {
+      return null;
+    }
+  }
   
 
 

@@ -1,0 +1,15 @@
+<div class="edit-ad">
+    <h1>Edit Ad</h1>
+    <form (ngSubmit)="saveAd()">
+      <div>
+        <label for="title">Title:</label>
+        <input id="title" [(ngModel)]="ad.title" name="title" required />
+      </div>
+      <div>
+        <label for="description">Description:</label>
+        <textarea id="description" [(ngModel)]="ad.description" name="description" required></textarea>
+      </div>
+      <button type="submit">Save</button>
+    </form>
+  </div>
+  

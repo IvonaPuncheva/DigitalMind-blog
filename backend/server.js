@@ -222,6 +222,30 @@ app.get('/ads/:id', async (req, res) => {
     }
   });
   
+  app.put('/ads/:id', authenticate, async (req, res) => {
+    try {
+        const ad = await Ad.findById(req.params.id);
+
+        if (!ad) {
+            return res.status(404).json({ message: 'Ad not found' });
+        }
+
+        if (ad.userId.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'You are not authorized to edit this ad' });
+        }
+
+        ad.title = req.body.title || ad.title;
+        ad.description = req.body.description || ad.description;
+
+        await ad.save();
+
+        res.status(200).json({ message: 'Ad updated successfully', ad });
+    } catch (err) {
+        console.error('Error updating ad:', err);
+        res.status(500).json({ message: 'Error updating ad', error: err });
+    }
+});
+
 
 
 app.post('/verify-token', authenticate, (req, res) => {

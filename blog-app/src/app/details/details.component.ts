@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-details',
@@ -13,10 +14,13 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class DetailsComponent implements OnInit {
   ad: any;
+  isOwner: boolean = false;
 
   constructor(private route: ActivatedRoute,
      private http: HttpClient,
-    private _snackBar:MatSnackBar) {}
+    private _snackBar:MatSnackBar,
+    private authService: AuthenticationService,
+    private router: Router) {}
 
   ngOnInit(): void {
     const adId = this.route.snapshot.paramMap.get('id');
@@ -29,6 +33,9 @@ export class DetailsComponent implements OnInit {
     this.http.get(`http://localhost:5000/ads/${id}`).subscribe(
       (response: any) => {
         this.ad = response;
+
+        const currentUserId = this.authService.getCurrentUserId();
+        this.isOwner = currentUserId === this.ad.userId._id; 
       },
       (error) => {
         console.error('Error fetching ad details:', error);
@@ -57,5 +64,12 @@ export class DetailsComponent implements OnInit {
         }
       }
     );
+  }
+  editAd() {
+    if (this.isOwner) {
+      this.router.navigate(['/edit', this.ad._id]);
+    } else {
+      this._snackBar.open('You are not authorized to edit this ad.', 'Close', { duration: 3000 });
+    }
   }
 }

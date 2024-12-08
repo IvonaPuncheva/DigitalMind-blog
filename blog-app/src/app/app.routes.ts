@@ -10,6 +10,7 @@ import { AuthGuard } from './auth.guard';
 import { CreateComponent } from './pages/create/create.component';
 import { NgModule } from '@angular/core';
 import { DetailsComponent } from './details/details.component';
+import { EditComponent } from './edit/edit.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   {path: 'create', component: CreateComponent, canActivate: [AuthGuard]},
   { path: 'details/:id', component: DetailsComponent },
+  { path: 'edit/:id', component: EditComponent },
   { path: '**', component: PageNotFoundComponent },
 ];
 @NgModule({
