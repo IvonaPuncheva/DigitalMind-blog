@@ -246,6 +246,25 @@ app.get('/ads/:id', async (req, res) => {
     }
 });
 
+app.delete('/ads/:id', authenticate, async (req, res) => {
+    try {
+        const ad = await Ad.findById(req.params.id);
+
+        if (!ad) {
+            return res.status(404).json({ message: 'Ad not found' });
+        }
+
+        if (ad.userId.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'You are not authorized to delete this ad' });
+        }
+
+        await Ad.findByIdAndDelete(req.params.id); 
+        res.status(200).json({ message: 'Ad deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting ad:', err);
+        res.status(500).json({ message: 'Error deleting ad', error: err });
+    }
+});
 
 
 app.post('/verify-token', authenticate, (req, res) => {

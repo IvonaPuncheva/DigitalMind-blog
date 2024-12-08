@@ -7,6 +7,7 @@
     <button (click)="likeAd()">Like</button>
     <div *ngIf="isOwner" class="owner-actions">
       <button (click)="editAd()">Edit</button>
+      <button (click)="deleteAd()">Delete</button>
     </div>
   </div>
   <div *ngIf="!ad">

@@ -72,4 +72,29 @@ export class DetailsComponent implements OnInit {
       this._snackBar.open('You are not authorized to edit this ad.', 'Close', { duration: 3000 });
     }
   }
+  deleteAd() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      this._snackBar.open('You are not authenticated. Please log in.', 'Close', { duration: 3000 });
+      return;
+    }
+  
+    if (!confirm('Are you sure you want to delete this ad?')) {
+      return;
+    }
+  
+    const headers = { Authorization: `Bearer ${token}` };
+  
+    this.http.delete(`http://localhost:5000/ads/${this.ad._id}`, { headers }).subscribe(
+      () => {
+        this._snackBar.open('Ad deleted successfully!', 'Close', { duration: 3000 });
+        this.router.navigate(['/']); 
+      },
+      (error) => {
+        console.error('Error deleting ad:', error);
+        this._snackBar.open('Failed to delete the ad. Please try again.', 'Close', { duration: 3000 });
+      }
+    );
+  }
+  
 }
