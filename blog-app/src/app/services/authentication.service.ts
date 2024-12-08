@@ -34,7 +34,14 @@ export class AuthenticationService {
     }
     return false;
   }
+
+  
   getCurrentUserId(): string | null {
+    if (typeof window === 'undefined' || !localStorage) {
+      // console.warn('localStorage is not available.');
+      return null;
+    }
+  
     const token = localStorage.getItem('authToken');
     if (!token) return null;
   
@@ -46,7 +53,6 @@ export class AuthenticationService {
     }
   }
   
-
 
   verifyToken(): Observable<any> {
     const token = localStorage.getItem('authToken');
