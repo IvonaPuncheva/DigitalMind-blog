@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +12,16 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) {}
 
+
   loginUser(email: string, password: string): Observable<any> {
-    return this.http.post<any>(this.loginUrl, { email, password }).pipe(
+    return this.http.post<any>(this.loginUrl, { email, password }, { withCredentials: true }).pipe(
       tap(response => {
-        if (response.token) {
-          localStorage.setItem('authToken', response.token);
+        if (response.accessToken) {
+          localStorage.setItem('authToken', response.accessToken);
         }
       })
     );
-  }
+}
 
   logout(): void {
     localStorage.removeItem('authToken');
@@ -54,13 +55,51 @@ export class AuthenticationService {
   }
   
 
+
   verifyToken(): Observable<any> {
     const token = localStorage.getItem('authToken');
     
-    if (!token) return of(false);
+    if (!token) {
+        return of(false);
+    }
 
-    return this.http.post<any>(`${this.apiUrl}/verify-token`, { token }).pipe(
-      catchError(() => of(false)) 
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const isExpired = payload.exp * 1000 < Date.now();
+
+    if (isExpired) {
+        console.log('Token expired. Attempting to refresh...');
+        return this.refreshToken().pipe(
+            map(response => !!response), 
+            catchError(() => of(false))
+        );
+    }
+
+    return of(true);
+}
+
+  
+  
+  refreshToken(): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/refresh-token`, {}, { withCredentials: true }).pipe(
+      tap(response => {
+        if (response.accessToken) {
+          localStorage.setItem('authToken', response.accessToken);
+          console.log('Token refreshed successfully.');
+        }
+      }),
+      catchError(err => {
+        console.error('Error refreshing token:', err);
+        this.logout();
+        return of(null);
+      })
     );
+}
+
+  httpGetWithAuth(endpoint: string): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = { Authorization: `Bearer ${token}` };
+  
+    return this.http.get(`${this.apiUrl}/${endpoint}`, { headers });
   }
+  
 }

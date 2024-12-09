@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 app.use(cors({
     origin: 'http://localhost:4200', 
@@ -50,31 +52,31 @@ app.post('/api/items', async (req, res) => {
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'your_secret_key';
 
-
-
-
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const user = await User.findOne({ email });
-
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
-
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+        const tokens = generateTokens({ id: user._id, email: user.email });
 
-        res.json({ 
-            token, 
-            message: 'Login successful'
+     
+        res.cookie('refreshToken', tokens.refreshToken, {
+            httpOnly: true,
+            secure: false, 
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, 
         });
+
+        res.json({ accessToken: tokens.accessToken });
     } catch (err) {
         console.error('Error during login:', err);
         res.status(500).json({ message: 'Error during login', error: err });
@@ -342,12 +344,13 @@ app.delete('/ads/:id', authenticate, async (req, res) => {
     }
 });
 const generateTokens = (user) => {
-    const accessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '15m' });
+    const accessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
     const refreshToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '7d' });
     return { accessToken, refreshToken };
 };
+
 app.post('/refresh-token', async (req, res) => {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken; 
 
     if (!refreshToken) {
         return res.status(401).json({ message: 'Refresh token required' });
@@ -356,7 +359,14 @@ app.post('/refresh-token', async (req, res) => {
     try {
         const decoded = jwt.verify(refreshToken, SECRET_KEY);
         const newTokens = generateTokens(decoded);
-        res.status(200).json(newTokens);
+        res.cookie('refreshToken', newTokens.refreshToken, {
+            httpOnly: true,
+            secure: false, 
+            sameSite: 'Strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        res.status(200).json({ accessToken: newTokens.accessToken });
     } catch (err) {
         console.error('Error with refresh token:', err.message);
         res.status(403).json({ message: 'Invalid or expired refresh token' });
