@@ -9,6 +9,22 @@
       <button (click)="editAd()">Edit</button>
       <button (click)="deleteAd()">Delete</button>
     </div>
+
+    <div *ngIf="comments.length > 0">
+      <div *ngFor="let comment of comments" class="comment">
+        <strong>{{ comment.userId.username }}</strong>
+        <p>{{ comment.text }}</p>
+        <small>{{ comment.createdAt | date:'short' }}</small>
+      </div>
+    </div>
+    <div *ngIf="comments.length === 0">
+      <p>No comments yet. Be the first to comment!</p>
+    </div>
+    
+    <textarea [(ngModel)]="newComment" placeholder="Write a comment..."></textarea>
+    <button (click)="addComment()">Add Comment</button>
+    
+    
   </div>
   <div *ngIf="!ad">
     <p>Loading ad details...</p>

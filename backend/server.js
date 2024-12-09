@@ -6,7 +6,12 @@ const bcrypt = require('bcrypt');
 
 const app = express();
 
-app.use(cors());
+
+app.use(cors({
+    origin: 'http://localhost:4200', 
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type']
+}));
 app.use(bodyParser.json());
 
 mongoose.connect('mongodb+srv://iv:oNPRxvikFTn4rzPY@cluster0.uzsfx.mongodb.net/blog?retryWrites=true&w=majority&appName=Cluster0')
@@ -91,6 +96,92 @@ const Ad = mongoose.model('Ad', new mongoose.Schema({
     likes: { type: Number, default: 0 }, 
     likedUsers: { type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] } 
 }));
+const Comment = mongoose.model('Comment', new mongoose.Schema({
+    adId: { type: mongoose.Schema.Types.ObjectId, ref: 'Ad', required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    text: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+}));
+function authenticate(req, res, next) {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        console.error('No token provided');
+        return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        console.log('Token verified successfully:', decoded);
+        req.user = decoded; 
+        next();
+    } catch (err) {
+        console.error('Token error:', err.message);
+        if (err.name === 'TokenExpiredError') {
+            return res.status(403).json({ message: 'Token expired. Please login again.' });
+        } else if (err.name === 'JsonWebTokenError') {
+            return res.status(403).json({ message: 'Invalid token. Please login again.' });
+        }
+        res.status(500).json({ message: 'Token verification error', error: err });
+    }
+}
+
+
+
+app.post('/ads/:id/comments', authenticate, async (req, res) => {
+    try {
+        const adId = req.params.id;
+        const userId = req.user.id; 
+        const { text } = req.body;
+
+       
+        if (!text || text.trim() === '') {
+            return res.status(400).json({ message: 'Comment text is required' });
+        }
+
+       
+        if (!mongoose.Types.ObjectId.isValid(adId)) {
+            return res.status(400).json({ message: 'Invalid ad ID' });
+        }
+
+       
+        const newComment = new Comment({
+            adId: new mongoose.Types.ObjectId(adId),
+            userId: new mongoose.Types.ObjectId(userId),
+            text,
+        });
+
+        await newComment.save();
+        res.status(201).json({ message: 'Comment added successfully', comment: newComment });
+    } catch (err) {
+        console.error('Error adding comment:', err.message);
+        res.status(500).json({ message: 'Failed to add comment', error: err });
+    }
+});
+
+
+
+app.get('/ads/:id/comments', async (req, res) => {
+    try {
+        const adId = req.params.id;
+
+        if (!mongoose.Types.ObjectId.isValid(adId)) {
+            return res.status(400).json({ message: 'Invalid ad ID' });
+        }
+
+        const comments = await Comment.find({ adId })
+            .populate('userId', 'username')  
+            .sort({ createdAt: -1 });
+
+        console.log('Comments fetched:', comments); 
+        res.status(200).json(comments);
+    } catch (err) {
+        console.error('Error fetching comments:', err.message);
+        res.status(500).json({ message: 'Failed to fetch comments', error: err });
+    }
+});
+
+
 
 const likedAds = new Map(); 
 
@@ -126,22 +217,7 @@ app.post('/ads/:id/like', authenticate, async (req, res) => {
 });
 
 
-function authenticate(req, res, next) {
-    const token = req.headers.authorization?.split(' ')[1];
-    console.log('Received Token:', token); 
-    if (!token) {
-        return res.status(401).json({ message: 'Authentication required' });
-    }
 
-    try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        console.log('Decoded Token:', decoded); 
-        req.user = decoded; 
-        next();
-    } catch (err) {
-        res.status(403).json({ message: 'Invalid token' });
-    }
-}
 
 
 app.post('/create', authenticate, async (req, res) => {
@@ -263,6 +339,27 @@ app.delete('/ads/:id', authenticate, async (req, res) => {
     } catch (err) {
         console.error('Error deleting ad:', err);
         res.status(500).json({ message: 'Error deleting ad', error: err });
+    }
+});
+const generateTokens = (user) => {
+    const accessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '15m' });
+    const refreshToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '7d' });
+    return { accessToken, refreshToken };
+};
+app.post('/refresh-token', async (req, res) => {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+        return res.status(401).json({ message: 'Refresh token required' });
+    }
+
+    try {
+        const decoded = jwt.verify(refreshToken, SECRET_KEY);
+        const newTokens = generateTokens(decoded);
+        res.status(200).json(newTokens);
+    } catch (err) {
+        console.error('Error with refresh token:', err.message);
+        res.status(403).json({ message: 'Invalid or expired refresh token' });
     }
 });
 

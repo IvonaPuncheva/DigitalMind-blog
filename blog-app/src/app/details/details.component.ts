@@ -4,28 +4,32 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css'
 })
 export class DetailsComponent implements OnInit {
   ad: any;
   isOwner: boolean = false;
+  comments: any[] = [];
+  newComment: string = '';
 
   constructor(private route: ActivatedRoute,
      private http: HttpClient,
     private _snackBar:MatSnackBar,
-    private authService: AuthenticationService,
+    public authService: AuthenticationService,
     private router: Router) {}
 
   ngOnInit(): void {
     const adId = this.route.snapshot.paramMap.get('id');
     if (adId) {
       this.fetchAdDetails(adId);
+      this.fetchComments(adId);
     }
   }
 
@@ -42,6 +46,56 @@ export class DetailsComponent implements OnInit {
       }
     );
   }
+
+  fetchComments(adId: string) {
+    console.log('Fetching comments for ad:', adId);
+    this.http.get(`http://localhost:5000/ads/${adId}/comments`).subscribe(
+      (response: any) => {
+        console.log('Fetched comments:', response); 
+        this.comments = response;
+      },
+      (error) => {
+        console.error('Error fetching comments:', error);
+      }
+    );
+}
+
+
+
+  addComment() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      this._snackBar.open('You must be logged in to add a comment.', 'Close', { duration: 3000 });
+      return;
+    }
+
+    if (!this.newComment.trim()) {
+      this._snackBar.open('Comment text cannot be empty.', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.http.post(
+      `http://localhost:5000/ads/${this.ad._id}/comments`,
+      { text: this.newComment.trim() },
+      { headers: { Authorization: `Bearer ${token}` } }
+    ).subscribe(
+      (response: any) => {
+        this.comments.unshift(response.comment); 
+        this.newComment = ''; 
+        this._snackBar.open('Comment added successfully!', 'Close', { duration: 3000 });
+      },
+      (error) => {
+        console.error('Error adding comment:', error);
+        if (error.status === 400) {
+          this._snackBar.open(error.error.message, 'Close', { duration: 3000 });
+        } else {
+          this._snackBar.open('Failed to add comment. Please try again.', 'Close', { duration: 3000 });
+        }
+      }
+    );
+}
+
+
   likeAd() {
     const token = localStorage.getItem('authToken');
     if (!token) {
