@@ -8,7 +8,7 @@
     <h2>Latest Ads</h2>
     <div *ngFor="let ad of latestAds" class="ad-item">
       <h3>{{ ad.title }}</h3>
-      <p>{{ ad.description }}</p>
+
       <button [routerLink]="['/details', ad._id]">Details</button>
     </div>
   </div>

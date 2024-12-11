@@ -1,4 +1,3 @@
-
 .latest-ads {
   display: flex;
   flex-direction: column;
@@ -8,22 +7,20 @@
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
-  background-color: #f0f4f8; 
-  border-radius: 12px; 
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+  background-color: #f0f4f8;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-
 .welcome-message {
-  font-size: 2.8rem; 
+  font-size: 2.8rem;
   font-weight: bold;
-  color: #3e4b5b; 
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.2); /* Меко светене около текста */
+  color: #3e4b5b;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.2);
   animation: fadeIn 3s ease-out forwards;
   z-index: 1;
   margin-bottom: 20px;
 }
-
 
 @keyframes fadeIn {
   0% {
@@ -36,54 +33,59 @@
   }
 }
 
-
 h2 {
   font-size: 2.2rem;
   font-weight: 600;
-  color: #506C85; 
+  color: #506c85;
   margin-bottom: 20px;
   text-align: center;
 }
 
+/* Контейнер за рекламите */
+.latest-ads-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;  /* Подреждаме елементите на реда */
+  gap: 15px;  /* Разстояние между кутийките */
+  margin: 20px 0;
+  width: 100%;
+}
 
+/* Стилове за всяка реклама */
 .ad-item {
   background-color: #f7f9fc;
-  border: 1px solid #e1e1e1; 
+  border: 1px solid #e1e1e1;
   border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
+  padding: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  /* Задаване на фиксиран размер на кутиите */
+  width: calc(33.33% - 15px); /* За три кутийки на ред */
+  min-width: 200px;  /* Минимална ширина */
+  max-width: 250px;  /* Максимална ширина */
+  height: 150px;  /* Фиксирана височина */
 }
 
+/* Стилове при ховър */
 .ad-item:hover {
-  transform: translateY(-8px); 
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); 
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
-
 
 .ad-item h3 {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 600;
   margin: 0;
-  color: #3e4b5b; 
+  color: #3e4b5b;
 }
-
-
-.ad-item p {
-  font-size: 1.1rem;
-  color: #7a8a99; 
-  line-height: 1.6;
-  margin: 0;
-}
-
 
 button {
-  padding: 12px 25px;
-  background-color: #6c8fb6; 
+  padding: 10px 20px;
+  background-color: #6c8fb6;
   color: white;
   border: none;
   border-radius: 30px;
@@ -94,7 +96,7 @@ button {
 }
 
 button:hover {
-  background-color: #4e6a85; 
+  background-color: #4e6a85;
   transform: scale(1.05);
 }
 
@@ -102,14 +104,13 @@ button:focus,
 button:active {
   outline: none;
   transform: scale(1.05);
-  background-color: #3b5064; 
+  background-color: #3b5064;
 }
-
 
 body {
   margin: 0;
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(to bottom, #6c8fb6, #4e6a85); 
+  background: linear-gradient(to bottom, #6c8fb6, #4e6a85);
   color: white;
   position: relative;
   overflow-x: hidden;
