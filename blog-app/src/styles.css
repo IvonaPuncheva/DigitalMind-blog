@@ -1,25 +1,25 @@
-/* Основен стил за контейнера */
+
 .main-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Гарантира височина на екрана */
+    min-height: 100vh; 
 }
 
-/* Космически фон със звезди */
+
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
     background: linear-gradient(to bottom, #000428, #004e92);
     overflow-x: hidden;
     color: white;
-    position: relative; /* Добавяне на position: relative, за да работят псевдоелементите */
+    position: relative; 
   }
   
-  /* Генериране на звезди с анимация */
+  
   body::before,
   body::after {
     content: '';
-    position: absolute; /* Позициониране спрямо родителския елемент (body) */
+    position: absolute; 
     top: 0;
     left: 0;
     width: 100%;
@@ -34,7 +34,7 @@ body {
       20vw 70vh #fff,
       80vw 90vh #fff;
     animation: starry 100s linear infinite;
-    z-index: -1; /* Поставя звездите зад съдържанието */
+    z-index: -1; 
   }
   
   body::after {
@@ -51,7 +51,7 @@ body {
     }
   }
   
-/* Navbar основен стил */
+
 .navbar {
     position: fixed;
     top: 0;
@@ -83,7 +83,7 @@ body {
     font-size: 1rem;
     padding: 8px 15px;
     border-radius: 20px;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Използвайте background-color */
+    transition: background-color 0.3s ease, transform 0.2s ease; 
   }
   
 .nav-link:hover {
@@ -95,12 +95,12 @@ body {
     gap: 15px;
 }
 .content {
-    flex-grow: 1; /* Запълва останалата височина */
+    flex-grow: 1; 
     padding: 20px;
-    background-color: #f4f7fc;
+ background: linear-gradient(to bottom, #000428, #004e92);
 }
 .footer {
-    flex-shrink: 0; /* Фиксирано долу */
+    flex-shrink: 0; 
     background-color: #222;
     color: white;
     text-align: center;

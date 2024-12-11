@@ -1,29 +1,29 @@
 
-
 .latest-ads {
   display: flex;
   flex-direction: column;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   text-align: center;
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f0f4f8; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
 }
 
 
 .welcome-message {
-  font-size: 2.5rem;
+  font-size: 2.8rem; 
   font-weight: bold;
-  color: #7c3e3e;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 25px rgba(255, 255, 255, 0.3);
+  color: #3e4b5b; 
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.2); /* Меко светене около текста */
   animation: fadeIn 3s ease-out forwards;
   z-index: 1;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
+
 
 @keyframes fadeIn {
   0% {
@@ -38,21 +38,21 @@
 
 
 h2 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 600;
-  color: #333;
+  color: #506C85; 
   margin-bottom: 20px;
   text-align: center;
 }
 
 
 .ad-item {
-  background-color: #fff;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
+  background-color: #f7f9fc;
+  border: 1px solid #e1e1e1; 
+  border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); 
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -60,30 +60,30 @@ h2 {
 }
 
 .ad-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px); 
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); 
 }
 
 
 .ad-item h3 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 600;
   margin: 0;
-  color: #333;
+  color: #3e4b5b; 
 }
 
 
 .ad-item p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.5;
+  font-size: 1.1rem;
+  color: #7a8a99; 
+  line-height: 1.6;
   margin: 0;
 }
 
 
 button {
   padding: 12px 25px;
-  background-color: #007bff;
+  background-color: #6c8fb6; 
   color: white;
   border: none;
   border-radius: 30px;
@@ -94,7 +94,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #4e6a85; 
   transform: scale(1.05);
 }
 
@@ -102,8 +102,15 @@ button:focus,
 button:active {
   outline: none;
   transform: scale(1.05);
-  background-color: #004085;
+  background-color: #3b5064; 
 }
 
 
-
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #6c8fb6, #4e6a85); 
+  color: white;
+  position: relative;
+  overflow-x: hidden;
+}
