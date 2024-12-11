@@ -35,7 +35,4 @@ export class AdsService {
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
         return this.http.post<any>(`http://localhost:5000/ads/${adId}/like`, {}, { headers });
       }
-  
 }
-
-
