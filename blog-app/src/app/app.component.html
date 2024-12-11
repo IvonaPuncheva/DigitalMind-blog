@@ -1,11 +1,24 @@
-<main>
+<!-- <main>
   <app-nav-bar></app-nav-bar>
-  <div>
-      <!-- <h1>Hello, {{ title }}</h1> -->
-
-  </div>
+ 
   <app-footer/>
 </main>
 
 
-<router-outlet />
+<router-outlet /> -->
+<!-- <main class="main-container">
+  <app-nav-bar class="navbar"></app-nav-bar>
+  <div class="content">
+
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer class="footer"></app-footer>
+</main> -->
+<div class="main-container">
+  <app-nav-bar></app-nav-bar>
+  <div class="content">
+    <!-- <h1>Welcome to the Knowledge Hub</h1> -->
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</div>

@@ -1,9 +1,136 @@
-/* You can add global styles to this file, and also import other style files */
-body, 
-html, 
-*{
-    margin: 0;
-    padding: 0;
+/* Основен стил за контейнера */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Гарантира височина на екрана */
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Космически фон със звезди */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, #000428, #004e92);
+    overflow-x: hidden;
+    color: white;
+    position: relative; /* Добавяне на position: relative, за да работят псевдоелементите */
+  }
+  
+  /* Генериране на звезди с анимация */
+  body::before,
+  body::after {
+    content: '';
+    position: absolute; /* Позициониране спрямо родителския елемент (body) */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    box-shadow: 
+      50vw 20vh #fff,
+      10vw 50vh #fff,
+      30vw 80vh #fff,
+      70vw 40vh #fff,
+      90vw 10vh #fff,
+      20vw 70vh #fff,
+      80vw 90vh #fff;
+    animation: starry 100s linear infinite;
+    z-index: -1; /* Поставя звездите зад съдържанието */
+  }
+  
+  body::after {
+    animation-delay: -50s;
+    transform: scale(1.5);
+  }
+  
+  @keyframes starry {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+  
+/* Navbar основен стил */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.navbar-center {
+    display: flex;
+    gap: 20px;
+}
+.nav-link {
+    text-decoration: none;
+    color: white;
+    font-size: 1rem;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Използвайте background-color */
+  }
+  
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+.navbar-right {
+    display: flex;
+    gap: 15px;
+}
+.content {
+    flex-grow: 1; /* Запълва останалата височина */
+    padding: 20px;
+    background-color: #f4f7fc;
+}
+.footer {
+    flex-shrink: 0; /* Фиксирано долу */
+    background-color: #222;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 1rem;
+}
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+        height: auto;
+        justify-content: center;
+        padding: 10px;
+    }
+    .navbar-center {
+        order: 2;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .navbar-right {
+        order: 3;
+        justify-content: flex-end;
+        width: 100%;
+    }
+    .nav-link {
+        font-size: 0.9rem;
+    }
+    .content {
+        padding: 10px;
+    }
+    .footer {
+        font-size: 0.9rem;
+    }
+}
