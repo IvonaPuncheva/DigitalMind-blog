@@ -1,32 +1,115 @@
-.ads-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+
+body {
+  background: linear-gradient(135deg, #003366, #66b3ff); 
+  color: white;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+.ad-card {
+  background-color: rgba(255, 255, 255, 0.1); 
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ad-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+}
+
+p {
+  font-size: 1rem;
+}
+
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.view-details {
+  background-color: #66b3ff;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.view-details:hover {
+  background-color: #3399ff;
+}
+
+.like-ad {
+  background-color: #003366;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.like-ad:hover {
+  background-color: #001f3d;
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.pagination-btn {
+  background-color: #66b3ff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-btn:hover {
+  background-color: #3399ff;
+}
+
+.pagination-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 1rem;
+  color: white;
+  margin: 0 15px;
+}
+
+
+@media (max-width: 768px) {
+  .ad-card {
+    padding: 15px;
+    margin: 15px 0;
   }
-  
-  .ad-item {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 16px;
-    background-color: #f9f9f9;
+
+  .btn {
+    padding: 8px 15px;
   }
-  
-  button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  hr {
-    border: none;
-    border-top: 1px solid #ccc;
-    margin: 12px 0;
-  }
+}
+
   

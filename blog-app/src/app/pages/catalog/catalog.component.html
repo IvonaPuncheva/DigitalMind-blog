@@ -1,34 +1,23 @@
-<!-- 
-<div class="ads-list">
 
-  <div *ngFor="let ad of ads" class="ad-item">
+
+  
+
+  
+
+<div class="container">
+  <div *ngFor="let ad of displayedAds" class="ad-card">
     <h3>{{ ad.title }}</h3>
-    <p>{{ ad.description }}</p>
     <p>Likes: {{ ad.likes }}</p>
-    <button (click)="navigateToDetails(ad._id)">Details</button>
-   
+    <button class="btn view-details" (click)="navigateToDetails(ad._id)">View Details</button>
+    <button class="btn like-ad" (click)="likeAd(ad._id)">Like</button>
   </div>
-</div> -->
 
-<div *ngFor="let ad of displayedAds">
-
-  <div>{{ ad.title }}</div>
-  <p>Likes: {{ ad.likes }}</p>
-  <button (click)="navigateToDetails(ad._id)">View Details</button>
+ 
+  <div *ngIf="totalPages > 1" class="pagination">
+    <button class="btn pagination-btn" (click)="changePage(1)" [disabled]="currentPage === 1">First</button>
+    <button class="btn pagination-btn" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="btn pagination-btn" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
+    <button class="btn pagination-btn" (click)="changePage(totalPages)" [disabled]="currentPage === totalPages">Last</button>
+  </div>
 </div>
-
-
-<div *ngIf="totalPages > 1" class="pagination">
-  <button (click)="changePage(1)" [disabled]="currentPage === 1">First</button>
-  <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Prev</button>
-  <span>Page {{ currentPage }} of {{ totalPages }}</span>
-  <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
-  <button (click)="changePage(totalPages)" [disabled]="currentPage === totalPages">Last</button>
-</div>
-
-
-  
-
-  
-
-  

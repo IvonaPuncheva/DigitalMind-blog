@@ -1,46 +1,106 @@
+/* Общи стилове */
+body {
+  background: linear-gradient(135deg, #003366, #66b3ff); /* Тъмно-синьо към светло-синьо */
+  color: white;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Контейнер за формата за регистрация */
 .register-container {
-    max-width: 400px;
-    margin: 0 auto;
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  color: #333;
+  transition: border 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #66b3ff;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #66b3ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #3399ff;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 15px;
+  color: green;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Мобилна оптимизация */
+@media (max-width: 768px) {
+  .register-container {
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
   }
-  
-  .register-container h2 {
-    text-align: center;
+
+  h2 {
+    font-size: 1.5rem;
   }
-  
-  .register-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .register-container label {
-    font-weight: bold;
-  }
-  
-  .register-container input {
+
+  input {
     padding: 8px;
-    font-size: 14px;
+    font-size: 0.9rem;
   }
-  
-  .register-container button {
-    padding: 10px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+
+  .submit-btn {
+    font-size: 1rem;
   }
-  
-  .register-container button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .register-container p {
-    text-align: center;
-    color: green;
-  }
-  
+}

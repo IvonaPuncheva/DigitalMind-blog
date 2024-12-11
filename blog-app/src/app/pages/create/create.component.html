@@ -1,19 +1,26 @@
+<div class="add-ad-container">
+  <h2>Add New Article</h2>
+  <form [formGroup]="adForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input id="title" formControlName="title" type="text">
+      <div *ngIf="adForm.get('title')?.invalid && adForm.get('title')?.touched" class="error-message">
+        Title is required and must be at least 5 characters long.
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description"></textarea>
+      <div *ngIf="adForm.get('description')?.invalid && adForm.get('description')?.touched" class="error-message">
+        Description is required and must be at least 20 characters long.
+      </div>
+    </div>
 
-  <div class="add-ad-container">
-    <h2>Add New Advertisement</h2>
-    <form [formGroup]="adForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label for="title">Title</label>
-        <input id="title" formControlName="title" type="text">
-      </div>
-      <div>
-        <label for="description">Description</label>
-        <textarea id="description" formControlName="description"></textarea>
-      </div>
-      <button type="submit">Submit</button>
-    </form>
-    <p>{{ message }}</p>
-  </div>
-  
+    <button type="submit" [disabled]="adForm.invalid" class="submit-btn">Submit</button>
+  </form>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+</div>
 
   

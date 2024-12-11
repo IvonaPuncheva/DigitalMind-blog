@@ -1,31 +1,41 @@
-<div class="ad-details" *ngIf="ad">
-    <h1>{{ ad.title }}</h1>
-    <p>{{ ad.description }}</p>
-    <p><strong>Posted by: </strong>{{ ad.userId.username }}</p>
-    <p><strong>Published on: </strong>{{ ad.createdAt | date:'medium' }}</p>
-    <p>Likes: {{ ad.likes }}</p>
-    <button (click)="likeAd()">Like</button>
-    <div *ngIf="isOwner" class="owner-actions">
-      <button (click)="editAd()">Edit</button>
-      <button (click)="deleteAd()">Delete</button>
-    </div>
-
-    <div *ngIf="comments.length > 0">
-      <div *ngFor="let comment of comments" class="comment">
-        <strong>{{ comment.userId.username }}</strong>
-        <p>{{ comment.text }}</p>
-        <small>{{ comment.createdAt | date:'short' }}</small>
+ <div class="ad-details" *ngIf="ad">
+    <div class="ad-header">
+      <h1>{{ ad.title }}</h1>
+      <p class="ad-description">{{ ad.description }}</p>
+      <div class="ad-meta">
+        <p><strong>Posted by: </strong>{{ ad.userId.username }}</p>
+        <p><strong>Published on: </strong>{{ ad.createdAt | date:'medium' }}</p>
+        <p><strong>Likes: </strong>{{ ad.likes }}</p>
+      </div>
+      <div class="ad-actions">
+        <button class="btn like-btn" (click)="likeAd()">Like</button>
+        <div *ngIf="isOwner" class="owner-actions">
+          <button class="btn edit-btn" (click)="editAd()">Edit</button>
+          <button class="btn delete-btn" (click)="deleteAd()">Delete</button>
+        </div>
       </div>
     </div>
-    <div *ngIf="comments.length === 0">
-      <p>No comments yet. Be the first to comment!</p>
+  
+    <div class="comments-section">
+      <h2>Comments</h2>
+      <div *ngIf="comments.length > 0">
+        <div *ngFor="let comment of comments" class="comment-card">
+          <strong>{{ comment.userId.username }}</strong>
+          <p>{{ comment.text }}</p>
+          <small>{{ comment.createdAt | date:'short' }}</small>
+        </div>
+      </div>
+      <div *ngIf="comments.length === 0">
+        <p>No comments yet. Be the first to comment!</p>
+      </div>
+      
+      <div class="add-comment">
+        <textarea [(ngModel)]="newComment" placeholder="Write a comment..."></textarea>
+        <button class="btn add-comment-btn" (click)="addComment()">Add Comment</button>
+      </div>
     </div>
-    
-    <textarea [(ngModel)]="newComment" placeholder="Write a comment..."></textarea>
-    <button (click)="addComment()">Add Comment</button>
-    
-    
   </div>
+  
   <div *ngIf="!ad">
     <p>Loading ad details...</p>
   </div>
